@@ -14,22 +14,26 @@ export const msalConfig = {
 export const loginRequest = {
   scopes: ["User.Read", "Mail.Read"]
 };
-
-
 export function buildWeeklyMailUri() {
-  const now = new Date();
-  const day = now.getDay();
-  const diffToMonday = (day === 0 ? -6 : 1 - day);
-  const start = new Date(now);
-  start.setDate(now.getDate() + diffToMonday);
-  start.setHours(0, 0, 0, 0);
-
-  const end = new Date(start);
-  end.setDate(start.getDate() + 6);
-  end.setHours(23, 59, 59, 999);
-
-  const startIso = start.toISOString();
-  const endIso = end.toISOString();
-
-  return `https://graph.microsoft.com/v1.0/me/messages?$search="subject:週報"&$filter=receivedDateTime ge ${startIso} and receivedDateTime le ${endIso}`;
+  return `https://graph.microsoft.com/v1.0/me/mailFolders('Inbox')/messages?$search="subject:週報"`;
 }
+
+
+// export function buildWeeklyMailUri() {
+//   const now = new Date();
+//   const day = now.getDay();
+//   const diffToMonday = (day === 0 ? -6 : 1 - day);
+//   const start = new Date(now);
+//   start.setDate(now.getDate() + diffToMonday);
+//   start.setHours(0, 0, 0, 0);
+
+//   const end = new Date(start);
+//   end.setDate(start.getDate() + 6);
+//   end.setHours(23, 59, 59, 999);
+
+//   const startIso = start.toISOString();
+//   const endIso = end.toISOString();
+
+//   // return `https://graph.microsoft.com/v1.0/me/messages?$search="subject:週報"&$filter=receivedDateTime ge ${startIso} and receivedDateTime le ${endIso}`;
+//   return `https://graph.microsoft.com/v1.0/me/mailFolders('Inbox')/messages?$search="subject:週報"`
+// }

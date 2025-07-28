@@ -16,15 +16,34 @@
   <script type="module" src="./authPopup.js"></script>
   <script type="module">
     import { getMail } from './authPopup.js';
-    document.getElementById("get_email_btn").addEventListener("click", async () => {
-      const data = await getMail();
-      const emails = data.value || [];
-      let output = "";
-      emails.forEach(mail => {
-        output += `- ${mail.subject} | From: ${mail.from?.emailAddress?.address} | Received: ${mail.receivedDateTime}\n`;
-      });
-      document.getElementById("output").textContent = output || "No reports found.";
+
+    function isThisWeek(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const day = now.getDay();
+      const monday = new Date(now);
+      monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
+      monday.setHours(0, 0, 0, 0);
+
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+      sunday.setHours(23, 59, 59, 999);
+
+      return date >= monday && date <= sunday;
+    }
+   document.getElementById("get_email_btn").addEventListener("click", async () => {
+    const data = await getMail();
+    const emails = data.value || [];
+
+    const thisWeekEmails = emails.filter(mail => isThisWeek(mail.receivedDateTime));
+
+    let output = "";
+    thisWeekEmails.forEach(mail => {
+      output += `- ${mail.subject} | From: ${mail.from?.emailAddress?.address} | Received: ${mail.receivedDateTime}\n`;
     });
+
+    document.getElementById("output").textContent = output || "No reports found for this week.";
+  });
   </script>
       <script src="https://cdn.jsdelivr.net/npm/@microsoft/microsoft-graph-client@3.0.3/lib/graph-js-sdk.js"></script>
     <!-- importing app scripts (load order is important) -->
