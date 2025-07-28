@@ -1,5 +1,5 @@
 
-import { buildWeeklyMailUri, graphConfig, loginRequest } from "./authConfig.js";
+import { buildWeeklyMailUri,msalConfig, loginRequest } from "./authConfig.js";
 import { callGraph } from "./fetch.js";
 
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
@@ -33,7 +33,7 @@ export async function getMail() {
   const uri = buildWeeklyMailUri();
   return await callGraph(
     username,
-    graphConfig.graphReadMailEndpoint.scopes,
+    ["User.Read", "Mail.Read"],
     uri,
     msal.InteractionType.Popup,
     myMSALObj

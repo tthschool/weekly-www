@@ -26,5 +26,11 @@
       document.getElementById("output").textContent = output || "No reports found.";
     });
   </script>
+      <script src="https://cdn.jsdelivr.net/npm/@microsoft/microsoft-graph-client@3.0.3/lib/graph-js-sdk.js"></script>
+    <!-- importing app scripts (load order is important) -->
+    <script type="module" src="./authConfig.js"></script>
+    <script type="module" src="./authPopup.js"></script>
+    <script type="module" src="./graph.js"></script>
+    <script type="module" src="./fetch.js"></script>
 </body>
 </html>
