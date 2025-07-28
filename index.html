@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Weekly Report</title>
+  <script src="https://alcdn.msauth.net/browser/2.31.0/js/msal-browser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@microsoft/microsoft-graph-client/lib/graph-js-sdk.js"></script>
+</head>
+<body>
+  <button onclick="signIn()">ログイン</button>
+  <button onclick="signOut()">ログアウト</button>
+  <button id="get_email_btn">メールを取得</button>
+  <pre id="output"></pre>
+
+  <script type="module" src="./authConfig.js"></script>
+  <script type="module" src="./authPopup.js"></script>
+  <script type="module">
+    import { getMail } from './authPopup.js';
+    document.getElementById("get_email_btn").addEventListener("click", async () => {
+      const data = await getMail();
+      const emails = data.value || [];
+      let output = "";
+      emails.forEach(mail => {
+        output += `- ${mail.subject} | From: ${mail.from?.emailAddress?.address} | Received: ${mail.receivedDateTime}\n`;
+      });
+      document.getElementById("output").textContent = output || "No reports found.";
+    });
+  </script>
+</body>
+</html>
